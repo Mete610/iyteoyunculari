@@ -130,9 +130,33 @@ const upload = multer({
 // 📡 API ENDPOINTS
 // ==========================================
 
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Health check (Keep-Alive for Supabase)
+app.get('/api/health', async (req, res) => {
+    try {
+        // Supabase'e basit bir sorgu atarak uyanık tutuyoruz
+        const { data, error } = await supabase
+            .from('settings')
+            .select('key')
+            .limit(1)
+            .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116: veri bulunamadı hatası (önemsiz)
+            throw error;
+        }
+
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Health Check Error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 // İletişim Formu (rate limited)
