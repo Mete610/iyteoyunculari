@@ -28,20 +28,31 @@ app.use(helmet({
 }));
 
 // CORS - Sadece izin verilen originler
+// CORS - Sadece izin verilen originler
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://localhost:3000',
     'https://iyteoyunculari.com',
-    'https://www.iyteoyunculari.com'
-];
+    'https://www.iyteoyunculari.com',
+    process.env.FRONTEND_URL // Render environment variable
+].filter(Boolean); // Remove undefined/null values
 
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (mobile apps, Postman, etc.)
         if (!origin) return callback(null, true);
+
+        // Vercel preiview/production domainlerine izin ver
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
+
+        console.log('Blocked by CORS:', origin); // Debug log
         return callback(new Error('CORS policy violation'), false);
     },
     credentials: true
