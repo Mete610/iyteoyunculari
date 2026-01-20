@@ -1,0 +1,19 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # Her 3 günde bir gece 00:00'da çalışır
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Manuel çalıştırmak için buton ekler
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Heartbeat Table
+        run: |
+          curl -X PATCH "${{ secrets.SUPABASE_URL }}/rest/v1/heartbeat?id=eq.1" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{ "last_ping": "now()" }'
