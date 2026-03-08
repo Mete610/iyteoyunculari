@@ -18,7 +18,7 @@ const About: React.FC = () => {
                         <div className="w-20 h-1 bg-red-600 mb-8"></div>
                         <p className="text-gray-300 text-lg leading-relaxed mb-6">
                             İYTE Oyuncuları, teknolojinin ve bilimin merkezinde, sanatın ışığını yakan bir topluluktur.
-                            Mühendislik ve mimarlık öğrencilerinden oluşan ekibimizle, disiplinler arası bir bakış açısını
+                            Mühendislik, mimarlık ve fen fakültesi öğrencilerinden oluşan ekibimizle, disiplinler arası bir bakış açısını
                             sahne tozuna karıştırıyoruz.
                         </p>
                         <p className="text-gray-300 text-lg leading-relaxed mb-8">
